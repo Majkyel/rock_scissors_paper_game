@@ -80,6 +80,50 @@ var newGame = function () {
   outputWinsRoundNumber(params.winsRoundNumber);
 };
 
+// runModal function
+var runModal = function (winner) {
+    
+    // show modal function
+    var showModal = function () {
+        document.preventDefault();
+		document.querySelector('#modal-overlay').classList.add('show');
+	};
+    showModal();
+    
+
+    var modalOne = document.querySelector('.modal');
+    var modalOneContent = modalOne.querySelector('p');
+    
+	var finallResult = function (winner) {
+        modalOneContent.innerHTML = 'THE WINNER IS: ' + winner + '<br>';
+    };
+    finallResult(winner);
+
+    // close click
+    var hideModal = function (event) {
+		event.preventDefault();
+		document.querySelector('#modal-overlay').classList.remove('show');
+	};
+	
+	var closeButtons = document.querySelectorAll('.modal .close');
+	
+	for(var i = 0; i < closeButtons.length; i++) {
+		closeButtons[i].addEventListener('click', hideModal);
+	}
+    
+    // close click overlay
+    document.querySelector('#modal-overlay').addEventListener('click', hideModal);
+    
+    // stop close modal click inside them
+    var modals = document.querySelectorAll('.modal');
+	
+	for(var i = 0; i < modals.length; i++) {
+		modals[i].addEventListener('click', function (event) {
+			event.stopPropagation();
+		});
+	}
+};
+
 
 // playerMove function
 var playerMove = function (playerResult) {
@@ -159,18 +203,22 @@ var playerMove = function (playerResult) {
   var winner = winnerMechanism();
   
   // output number of win round to end game
-  var outputWinsRoundNumber = function() {  
+  var outputWinsRoundNumber = function () {  
     if (params.winsRoundNumber > 0) {
        endGameWinsRoundCounter.innerHTML = '<header>END GAME ROUND</header>' + params.winsRoundNumber;
     } else if (params.winsRoundNumber == 0) {
-      output.insertAdjacentHTML('afterbegin','THE WINNER IS: ' + winner + '<br>');
-      endGameWinsRoundCounter.innerHTML = '<header>END GAME ROUND</header>' + 'END GAME';
+      //output.insertAdjacentHTML('afterbegin','THE WINNER IS: ' + winner + '<br>');   
+      endGameWinsRoundCounter.innerHTML = '<header>END GAME ROUND</header>' + 'END GAME';    
       params.endGame = true;
       disabledButtons(true);
+      runModal(winner);
+      
     } 
   };
   outputWinsRoundNumber();
 };
+
+
 
 
 // listener event to click the buttons
