@@ -168,7 +168,13 @@ var playerMove = function (playerResult) {
 };
 
 // listener event on the buttons
+var playerMoveClassButtons = document.querySelectorAll('button .player-move');
+var playerMoveClassLength = playerMoveClassButtons.length;
+for (var i = 0; i < playerMoveClassLength; i++) {
+    playerMoveClassButtons[i].addEventListener('click', function () { playerMove(this.getAttribute('data-move'))};)
+}
+/*    
 pickStone.addEventListener('click',function () { playerMove('STONE') });
 pickPaper.addEventListener('click',function () { playerMove('PAPER') });
-pickScissor.addEventListener('click',function () { playerMove('SCISSOR') });
+pickScissor.addEventListener('click',function () { playerMove('SCISSOR') });*/
 newGameButton.addEventListener('click',function () { newGame() });
