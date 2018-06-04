@@ -4,6 +4,8 @@
 var pickStone = document.getElementById('stonePicker');
 var pickPaper = document.getElementById('paperPicker');
 var pickScissor = document.getElementById('scissorPicker');
+var playerMoveClassButtons = document.querySelectorAll('.player-move');
+var playerMoveClassLength = playerMoveClassButtons.length;
 var newGameButton = document.getElementById('newGameButton');
 
 // getting main output div
@@ -11,46 +13,48 @@ var output = document.getElementById('generalOutput');
 
 // wins counter
 var outputCounter = document.getElementById('outputCounter');
-var playerCounter = 0;
-var computerCounter = 0;
 
-// general rounds counter
+// rounds counter
 var outputRoundCounter = document.getElementById('outputRoundCounter');
-var round = 0;
 
 // rounds to end game counter 
 var endGameWinsRoundCounter = document.getElementById('outputEndGameRound');
-var winsRoundNumber;
 
-// endGame variable
-var endGame = true;
+// object with global variables
+var params = {
+    playerCounter: 0,
+    computerCounter: 0,
+    round: 0,
+    winsRoundNumber: 0,
+    endGame: true
+};
 
 // buttons condition function
 var disabledButtons = function (value) {
-  pickStone.disabled = value; 
-  pickPaper.disabled = value; 
-  pickScissor.disabled = value;
+    pickStone.disabled = value; 
+    pickPaper.disabled = value; 
+    pickScissor.disabled = value;
 };
 disabledButtons(true);
 
-
 // output function wins counter
 var outputWinsCounter = function () {
-  outputCounter.innerHTML = '<header>COUNTER</header>' + playerCounter + ' - ' + computerCounter;
+  outputCounter.innerHTML = '<header>COUNTER</header>' + params.playerCounter + ' - ' + params.computerCounter;
 };
 
 // output function rounds
 var outputRound = function () {
-  outputRoundCounter.innerHTML = '<header>ROUND</header>' + round;
+  outputRoundCounter.innerHTML = '<header>ROUND</header>' + params.round;
 };
+
 
 // newGame function
 var newGame = function () {
   
-  if (endGame == true) {
-    round = 0;
-    playerCounter = 0;
-    computerCounter = 0;
+  if (params.endGame == true) {
+    params.round = 0;
+    params.playerCounter = 0;
+    params.computerCounter = 0;
     output.innerHTML = '';
     outputWinsCounter();
     outputRound();
@@ -60,12 +64,12 @@ var newGame = function () {
   disabledButtons(false);
   
   // prompt function
-  winsRoundNumber = window.prompt ('Enter the end number of  win rounds');
+  params.winsRoundNumber = window.prompt('Enter the end number of  win rounds');
   
   //output function to end game counter rounds
   var outputWinsRoundNumber = function (value) {
     endGameWinsRoundCounter.innerHTML = '<header>END GAME ROUND</header>' + value;
-    endGame = false;
+    params.endGame = false;
     
     if (isNaN(value)) {
       newGame();
@@ -73,15 +77,16 @@ var newGame = function () {
       newGame();
     } 
   };
-  outputWinsRoundNumber(winsRoundNumber);
+  outputWinsRoundNumber(params.winsRoundNumber);
 };
+
 
 // playerMove function
 var playerMove = function (playerResult) {
   
   // rounds , playerCounter and computerCounter
-  if (endGame == false) {
-    round++;
+  if (params.endGame == false) {
+    params.round++;
   } 
   
   // this function give computer game result
@@ -111,10 +116,10 @@ var playerMove = function (playerResult) {
   
   // this function is wins counter mechanism
   var winsCounter = function () {
-    if (generalResult == 'YOU WIN!: ' && endGame == false) {
-       return playerCounter++;
-    } else if (generalResult == 'YOU LOSS!: ' && endGame == false) {
-       return computerCounter++;    
+    if (generalResult == 'YOU WIN!: ' && params.endGame == false) {
+       return params.playerCounter++;
+    } else if (generalResult == 'YOU LOSS!: ' && params.endGame == false) {
+       return params.computerCounter++;    
     }
   };
   winsCounter();
@@ -127,7 +132,7 @@ var playerMove = function (playerResult) {
 
   // this function give content in general output
   var outputMessage = function () {
-    if (endGame == false) {
+    if (params.endGame == false) {
       output.insertAdjacentHTML('afterbegin',generalResult + 'You played ' + playerResult + ' ,computer played ' + pcResult + '<br>');
     } 
   };
@@ -136,18 +141,18 @@ var playerMove = function (playerResult) {
   // this function is mechanism number of win round to end game
   var winEndGameMechanism = function () {
     if ((generalResult == 'YOU WIN!: ') || (generalResult == 'YOU LOSS!: ')) {
-      winsRoundNumber--;    
+      params.winsRoundNumber--;    
     }
   };
   winEndGameMechanism();
   
   // winner mechanism
   var winnerMechanism = function () {
-   if (playerCounter > computerCounter) {
+   if (params.playerCounter > params.computerCounter) {
       return 'Player!';
-    } else if (playerCounter < computerCounter) {
+    } else if (params.playerCounter < params.computerCounter) {
       return 'Computer!';
-    } else if (playerCounter == computerCounter) {
+    } else if (params.playerCounter == params.computerCounter) {
       return 'REMIS!';
     }
   };
@@ -155,21 +160,20 @@ var playerMove = function (playerResult) {
   
   // output number of win round to end game
   var outputWinsRoundNumber = function() {  
-    if (winsRoundNumber > 0) {
-       endGameWinsRoundCounter.innerHTML = '<header>END GAME ROUND</header>' + winsRoundNumber;
-    } else if (winsRoundNumber == 0) {
+    if (params.winsRoundNumber > 0) {
+       endGameWinsRoundCounter.innerHTML = '<header>END GAME ROUND</header>' + params.winsRoundNumber;
+    } else if (params.winsRoundNumber == 0) {
       output.insertAdjacentHTML('afterbegin','THE WINNER IS: ' + winner + '<br>');
       endGameWinsRoundCounter.innerHTML = '<header>END GAME ROUND</header>' + 'END GAME';
-      endGame = true;
+      params.endGame = true;
       disabledButtons(true);
     } 
   };
   outputWinsRoundNumber();
 };
 
-// listener event on the buttons
-var playerMoveClassButtons = document.querySelectorAll('.player-move');
-var playerMoveClassLength = playerMoveClassButtons.length;
+
+// listener event to click the buttons
 for (var i = 0; i < playerMoveClassLength; i++) {
     playerMoveClassButtons[i].addEventListener('click', function () {  
         playerMove(this.getAttribute('data-move'));
