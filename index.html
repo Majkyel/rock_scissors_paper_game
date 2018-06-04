@@ -1,17 +1,36 @@
 <!DOCTYPE html>
 <html lang="pl">
 	<head>
-        <meta charset="UTF-8">
+        <meta charset = "UTF-8">
         <title>Rock, scissors, paper game</title>
-        <link rel="stylesheet" type="text/css" href="css/main.css">
+        <link rel = "stylesheet" type = "text/css" href = "css/main.css">
 	</head>
 	<body>
-		<header></header>
-		<main class="container">
-			<section class="about"></section>
-			<section class="interests"></section>
-		</main>
-		<footer></footer>
-		<script src="js/script.js"></script>
+		<div class = "container">
+            <button class = "button player-move" id = "stonePicker" data-move = "STONE">STONE</button>
+            <button class = "button player-move" id = "paperPicker" data-move = "PAPER">PAPER</button>
+            <button class = "button player-move" id = "scissorPicker" data-move = "SCISSOR">SCISSOR</button>
+            <button class = "button new-game" id = "newGameButton">NEW GAME</button>
+            <div class = "outputCounter" id = "outputCounter">
+                <header>COUNTER</header>
+            </div>
+            <div class = "outputRoundCounter" id = "outputRoundCounter">
+                <header>ROUND</header>
+            </div>
+            <div class= "outputEndGameRound" id = "outputEndGameRound">
+                <header>END GAME ROUND</header>
+            </div>
+            <div class = "generalOutput" id = "generalOutput"></div>
+        </div>
+        <div class = "overlay" id = "modal-overlay">
+            <div class = "modal" id = "modal-one">
+                <a href = "#" class = "close">x</a>
+                <header>FINAL RESULT</header>
+                <div class = "content">
+                    <p></p>
+                </div>
+            </div>
+        </div>
+		<script src = "js/script.js"></script>
 	</body>
 </html>
