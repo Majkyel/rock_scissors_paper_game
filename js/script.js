@@ -81,26 +81,27 @@ var newGame = function () {
 };
 
 // runModal function
-var runModal = function (winner) {
+var runModal = function(winner) {
     
-    // show modal function
-    var showModal = function () {
-        document.preventDefault();
-		document.querySelector('#modal-overlay').classList.add('show');
-	};
-    showModal();
-    
-
+    // getting selectors
     var modalOne = document.querySelector('.modal');
     var modalOneContent = modalOne.querySelector('p');
     
-	var finallResult = function (winner) {
+    // show modal function
+    var showModal = function() {
+        document.preventDefault();
+		document.querySelector('#modal-overlay').classList.add('show');
+        document.querySelector('.modal').classList.add('show');
+	};
+    showModal();
+    
+	var finallResult = function(winner) {
         modalOneContent.innerHTML = 'THE WINNER IS: ' + winner + '<br>';
     };
     finallResult(winner);
 
     // close click
-    var hideModal = function (event) {
+    var hideModal = function(event) {
 		event.preventDefault();
 		document.querySelector('#modal-overlay').classList.remove('show');
 	};
@@ -208,17 +209,14 @@ var playerMove = function (playerResult) {
        endGameWinsRoundCounter.innerHTML = '<header>END GAME ROUND</header>' + params.winsRoundNumber;
     } else if (params.winsRoundNumber == 0) {
       //output.insertAdjacentHTML('afterbegin','THE WINNER IS: ' + winner + '<br>');   
-      endGameWinsRoundCounter.innerHTML = '<header>END GAME ROUND</header>' + 'END GAME';    
-      params.endGame = true;
+      endGameWinsRoundCounter.innerHTML = '<header>END GAME ROUND</header>' + 'END GAME';     
       disabledButtons(true);
       runModal(winner);
-      
+      params.endGame = true;
     } 
   };
   outputWinsRoundNumber();
 };
-
-
 
 
 // listener event to click the buttons
