@@ -89,7 +89,6 @@ var runModal = function(winner) {
     
     // show modal function
     var showModal = function() {
-        document.preventDefault();
 		document.querySelector('#modal-overlay').classList.add('show');
         document.querySelector('.modal').classList.add('show');
 	};
