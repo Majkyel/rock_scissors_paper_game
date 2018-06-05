@@ -31,7 +31,7 @@ var params = {
 };
 
 // buttons condition function
-var disabledButtons = function (value) {
+var disabledButtons = function(value) {
     pickStone.disabled = value; 
     pickPaper.disabled = value; 
     pickScissor.disabled = value;
@@ -39,18 +39,18 @@ var disabledButtons = function (value) {
 disabledButtons(true);
 
 // output function wins counter
-var outputWinsCounter = function () {
+var outputWinsCounter = function() {
   outputCounter.innerHTML = '<header>COUNTER</header>' + params.playerCounter + ' - ' + params.computerCounter;
 };
 
 // output function rounds
-var outputRound = function () {
+var outputRound = function() {
   outputRoundCounter.innerHTML = '<header>ROUND</header>' + params.round;
 };
 
 
-// newGame function
-var newGame = function () {
+// start newGame function
+var newGame = function() {
   
   if (params.endGame == true) {
     params.round = 0;
@@ -68,7 +68,7 @@ var newGame = function () {
   params.winsRoundNumber = window.prompt('Enter the end number of  win rounds');
   
   //output function to end game counter rounds
-  var outputWinsRoundNumber = function (value) {
+  var outputWinsRoundNumber = function(value) {
     endGameWinsRoundCounter.innerHTML = '<header>END GAME ROUND</header>' + value;
     params.endGame = false;
     
@@ -81,13 +81,36 @@ var newGame = function () {
   outputWinsRoundNumber(params.winsRoundNumber);
 };
 
+
+// this table build tr in tbody table
+var buildTable = function() {
+    var tbody = document.querySelector('tbody');
+    
+    params.progress.forEach(function(progressResult) {
+        var row = document.createElement('tr');
+        tbody.appendChild(row);
+        for (var key in progressResult) {
+            buildTableTd(progressResult[key], row);
+        }
+    })
+};
+
+
+// this function build td in table
+var buildTableTd = function(value, row) {
+    var td = document.createElement('td');
+    td.innerHTML = value;
+    row.appendChild(td);
+};
+
+
 // runModal function
 var runModal = function(winner) {
     
     // getting selectors
     var modalOne = document.querySelector('.modal');
     var modalOneContent = modalOne.querySelector('p');
-    var tdTableData = modalOne.querySelectorAll('td');
+    
     
     // show modal function
     var showModal = function() {
@@ -98,9 +121,8 @@ var runModal = function(winner) {
     
 	var finallResult = function(winner) {
         modalOneContent.innerHTML = 'THE WINNER IS: ' + winner + '<br>';
-        for(var i = 0; i < tdTableData.length; i++) {         
-            tdTableData[i].innerHTML = params.progress[i] + '<br>';           
-        }
+        buildTable();
+
     };
     finallResult(winner);
 
@@ -131,7 +153,7 @@ var runModal = function(winner) {
 
 
 // playerMove function
-var playerMove = function (playerResult) {
+var playerMove = function(playerResult) {
     
   // rounds , playerCounter and computerCounter
   if (params.endGame == false) {
@@ -139,7 +161,7 @@ var playerMove = function (playerResult) {
   } 
   
   // this function give computer game result
-  var computerResult = function () {
+  var computerResult = function() {
     var x = Math.round((Math.random()*2)+1);
     if (x == 1) {
       return 'PAPER';
@@ -152,7 +174,7 @@ var playerMove = function (playerResult) {
   var pcResult = computerResult();
   
   // this function give general result
-  var mainResult = function () {
+  var mainResult = function() {
     if ((playerResult == 'STONE' && pcResult == 'STONE') || (playerResult == 'PAPER' && pcResult == 'PAPER') || (playerResult == 'SCISSOR' && pcResult == 'SCISSOR')) {
       return 'REMIS!: ';
     } else if ((playerResult == 'STONE' && pcResult == 'SCISSOR') || (playerResult == 'PAPER' && pcResult == 'STONE') || (playerResult == 'SCISSOR' && pcResult == 'PAPER')) {
@@ -164,7 +186,7 @@ var playerMove = function (playerResult) {
   var generalResult = mainResult();
   
   // this function is wins counter mechanism
-  var winsCounter = function () {
+  var winsCounter = function() {
     if (generalResult == 'YOU WIN!: ' && params.endGame == false) {
        return params.playerCounter++;
     } else if (generalResult == 'YOU LOSS!: ' && params.endGame == false) {
@@ -180,7 +202,7 @@ var playerMove = function (playerResult) {
   outputRound();
 
   // this function give content in general output
-  var outputMessage = function () {
+  var outputMessage = function() {
     if (params.endGame == false) {
       output.insertAdjacentHTML('afterbegin',generalResult + 'You played ' + playerResult + ' ,computer played ' + pcResult + '<br>');
     } 
@@ -188,7 +210,7 @@ var playerMove = function (playerResult) {
   outputMessage();
   
   // this function is mechanism number of win round to end game
-  var winEndGameMechanism = function () {
+  var winEndGameMechanism = function() {
     if ((generalResult == 'YOU WIN!: ') || (generalResult == 'YOU LOSS!: ')) {
       params.winsRoundNumber--;    
     }
@@ -196,7 +218,7 @@ var playerMove = function (playerResult) {
   winEndGameMechanism();
   
   // winner mechanism
-  var winnerMechanism = function () {
+  var winnerMechanism = function() {
    if (params.playerCounter > params.computerCounter) {
       return 'Player!';
     } else if (params.playerCounter < params.computerCounter) {
@@ -206,14 +228,18 @@ var playerMove = function (playerResult) {
     }
   };
   var winner = winnerMechanism();
-    
-  params.progress[0] = params.round;
-  params.progress[1] = playerResult;
-  params.progress[2] = pcResult;
-  params.progress[4] = params.playerCounter + ' - ' + params.computerCounter;  
+ 
+  // this object return to params.progress actuall result the game
+  var object = {
+      MatchRounds: params.round,
+      MatchPlayerResult: playerResult,
+      MatchComputerResult: pcResult,
+      FinallyResult: params.playerCounter + ' - ' + params.computerCounter
+  };
+  params.progress.push(object);
   
-  // output number of win round to end game
-  var outputWinsRoundNumber = function () {  
+  // output number of the win rounds to end game
+  var outputWinsRoundNumber = function() {  
     if (params.winsRoundNumber > 0) {
        endGameWinsRoundCounter.innerHTML = '<header>END GAME ROUND</header>' + params.winsRoundNumber;
     } else if (params.winsRoundNumber == 0) {
@@ -234,4 +260,4 @@ for (var i = 0; i < playerMoveClassLength; i++) {
         playerMove(this.getAttribute('data-move'));
     });
 } 
-newGameButton.addEventListener('click',function () { newGame() });
+newGameButton.addEventListener('click',function() { newGame() });
