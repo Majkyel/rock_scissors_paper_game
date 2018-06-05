@@ -26,7 +26,8 @@ var params = {
     computerCounter: 0,
     round: 0,
     winsRoundNumber: 0,
-    endGame: true
+    endGame: true,
+    progress: []
 };
 
 // buttons condition function
@@ -86,10 +87,10 @@ var runModal = function(winner) {
     // getting selectors
     var modalOne = document.querySelector('.modal');
     var modalOneContent = modalOne.querySelector('p');
+    var tdTableData = modalOne.querySelectorAll('td');
     
     // show modal function
     var showModal = function() {
-        document.preventDefault();
 		document.querySelector('#modal-overlay').classList.add('show');
         document.querySelector('.modal').classList.add('show');
 	};
@@ -97,6 +98,9 @@ var runModal = function(winner) {
     
 	var finallResult = function(winner) {
         modalOneContent.innerHTML = 'THE WINNER IS: ' + winner + '<br>';
+        for(var i = 0; i < tdTableData.length; i++) {         
+            tdTableData[i].innerHTML = params.progress[i] + '<br>';           
+        }
     };
     finallResult(winner);
 
@@ -128,7 +132,7 @@ var runModal = function(winner) {
 
 // playerMove function
 var playerMove = function (playerResult) {
-  
+    
   // rounds , playerCounter and computerCounter
   if (params.endGame == false) {
     params.round++;
@@ -202,6 +206,11 @@ var playerMove = function (playerResult) {
     }
   };
   var winner = winnerMechanism();
+    
+  params.progress[0] = params.round;
+  params.progress[1] = playerResult;
+  params.progress[2] = pcResult;
+  params.progress[4] = params.playerCounter + ' - ' + params.computerCounter;  
   
   // output number of win round to end game
   var outputWinsRoundNumber = function () {  
